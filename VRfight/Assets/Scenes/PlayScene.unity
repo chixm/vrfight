@@ -467,6 +467,14 @@ PrefabInstance:
       propertyPath: _trackingOriginType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7970827780040790718, guid: f523eaa322ea0e744b878a9930dd78c6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8030023469088694270, guid: f523eaa322ea0e744b878a9930dd78c6, type: 3}
+      propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f523eaa322ea0e744b878a9930dd78c6, type: 3}
 --- !u!1 &969175214 stripped
