@@ -7,15 +7,12 @@ public class GameRule : MonoBehaviour
 
     public GameObject player;
 
-    private GameObject camera;
-
     // Start is called before the first frame update
     void Start()
     {
         if (player != null) {
             Debug.Log("player has set for GameRule");
         }
-        camera = GameObject.FindGameObjectWithTag("MainCamera");
     }
 
     // Update is called once per frame
@@ -34,33 +31,42 @@ public class GameRule : MonoBehaviour
             Debug.Log("Two pressed");
         }
 
+        // Move by Thumb Stick
         // move to direction of thumb stick angled
-        var forwarding = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
-        MoveForward(forwarding);
+        var controllerDirection = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+        Move(controllerDirection);
 
         // This code is for debug
         if (Input.GetKeyDown(KeyCode.D)) {
-            MoveForward(new Vector2(1f,0f));
+            Move(new Vector2(1f,0f));
         }
         if (Input.GetKeyDown(KeyCode.A)) {
-            MoveForward(new Vector2(-1f,0f));
+            Move(new Vector2(-1f,0f));
         }
         if (Input.GetKeyDown(KeyCode.W)) {
-            MoveForward(new Vector2(0f,1f));
+            Move(new Vector2(0f,1f));
         }
         if (Input.GetKeyDown(KeyCode.S)) {
-            MoveForward(new Vector2(0f,-1f));
+            Move(new Vector2(0f,-1f));
+        }
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            player.transform.RotateAround(Vector3.forward, Vector3.up, -10);
+        }
+        if (Input.GetKeyDown(KeyCode.E)) {
+            player.transform.RotateAround(Vector3.forward, Vector3.up, 10);
         }
     }
 
-    Vector2 MoveForward(Vector2 controller) {
-        var currentRotate = camera.transform.rotation;
+    void Move(Vector2 controllerDirection) {
+        // camera direction
+        var forwardDirection = player.GetComponentInChildren<Camera>().transform.rotation;
+        // controller direction to HMD plane
+        Vector3 directionToGo = new Vector3(controllerDirection.x, 0, controllerDirection.y);
+        // rotate around HMD rotate
+        Vector3 forceToMove =  forwardDirection * directionToGo;
         // move by force to the body.
         var body = player.GetComponent<Rigidbody>();
-        // player's body is in x-z plane and controller axis is x-y, trade z-y.
-        body.AddForce(new Vector3(controller.x * 100, 0, controller.y * 100), ForceMode.Force);
-        return controller;
+        // add force to move
+        body.AddForce(forceToMove, ForceMode.Acceleration);
     }
-
-
 }
