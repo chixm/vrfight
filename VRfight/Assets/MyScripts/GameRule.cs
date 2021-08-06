@@ -38,16 +38,16 @@ public class GameRule : MonoBehaviour
 
         // This code is for debug
         if (Input.GetKeyDown(KeyCode.D)) {
-            Move(new Vector2(1f,0f));
+            Move(new Vector2(100f,0f));
         }
         if (Input.GetKeyDown(KeyCode.A)) {
-            Move(new Vector2(-1f,0f));
+            Move(new Vector2(-100f,0f));
         }
         if (Input.GetKeyDown(KeyCode.W)) {
-            Move(new Vector2(0f,1f));
+            Move(new Vector2(0f,100f));
         }
         if (Input.GetKeyDown(KeyCode.S)) {
-            Move(new Vector2(0f,-1f));
+            Move(new Vector2(0f,-100f));
         }
         if (Input.GetKeyDown(KeyCode.Q)) {
             player.transform.RotateAround(Vector3.forward, Vector3.up, -10);
