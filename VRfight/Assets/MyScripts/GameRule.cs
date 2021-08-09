@@ -70,18 +70,24 @@ public class GameRule : MonoBehaviour
         Vector3 forceToMove =  forwardDirection * directionToGo * 10;
         // move by force to the body.
         var body = player.GetComponent<Rigidbody>();
+        // speed limit of acceleration
+        if (body.velocity.magnitude > 10.0f) {
+            return;
+        }
         // add force to move
         body.AddForce(forceToMove, ForceMode.Acceleration);
     }
 
     // Rotate the character by thumbstick
     void Rotate(Vector2 controllerDirection) {
-        if (controllerDirection.sqrMagnitude < 0.1f) {
-            return;
+
+        float angle = 0.0f; //Mathf.Atan2(controllerDirection.x, controllerDirection.y) * Mathf.Rad2Deg;
+        if (controllerDirection.x > 0) {
+            angle = 90.0f * Time.deltaTime;
+        } else {
+            angle = -90.0f * Time.deltaTime;
         }
-        var roll = player.transform.localRotation;
-        float angle = Mathf.Atan2(controllerDirection.x, controllerDirection.y) * Mathf.Rad2Deg;
-        player.transform.Rotate(Vector3.up, angle);
+        player.transform.RotateAround(player.transform.position, Vector3.up, angle);
     }
 
     // player does not go to under ground or too high in the sky.
