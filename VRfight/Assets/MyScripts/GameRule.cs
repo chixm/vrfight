@@ -35,6 +35,8 @@ public class GameRule : MonoBehaviour
         // move to direction of thumb stick angled
         var controllerDirection = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
         Move(controllerDirection);
+        var secondaryDirection = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+        Rotate(secondaryDirection);
 
         // This code is for debug
         if (Input.GetKeyDown(KeyCode.D)) {
@@ -55,6 +57,8 @@ public class GameRule : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E)) {
             player.transform.RotateAround(Vector3.forward, Vector3.up, 10);
         }
+
+        AreaRestriction();
     }
 
     void Move(Vector2 controllerDirection) {
@@ -68,5 +72,25 @@ public class GameRule : MonoBehaviour
         var body = player.GetComponent<Rigidbody>();
         // add force to move
         body.AddForce(forceToMove, ForceMode.Acceleration);
+    }
+
+    // Rotate the character by thumbstick
+    void Rotate(Vector2 controllerDirection) {
+        if (controllerDirection.sqrMagnitude < 0.1f) {
+            return;
+        }
+        var roll = player.transform.localRotation;
+        float angle = Mathf.Atan2(controllerDirection.x, controllerDirection.y) * Mathf.Rad2Deg;
+        player.transform.Rotate(Vector3.up, angle);
+    }
+
+    // player does not go to under ground or too high in the sky.
+    void AreaRestriction() {
+        if (this.player.transform.position.y < 0) {
+            this.player.transform.position = new Vector3(this.player.transform.position.x, 0, this.player.transform.position.z);
+        }
+        if (this.player.transform.position.y > 1000) {
+            this.player.transform.position = new Vector3(this.player.transform.position.x, 1000, this.player.transform.position.z);
+        }
     }
 }
